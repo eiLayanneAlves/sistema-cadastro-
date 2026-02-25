@@ -1,0 +1,53 @@
+npm init -y
+npm install express mysql2 cors
+
+const express = require("express");
+const mysql = require("mysql2");
+const cors = require("cors");
+
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "cadastro_db"
+});
+
+db.connect(err => {
+  if (err) {
+    console.log("Erro ao conectar no banco");
+  } else {
+    console.log("Conectado ao MySQL");
+  }
+});
+
+app.post("/cadastrar", (req, res) => {
+  const { nome, email, idade } = req.body;
+
+  const sql = "INSERT INTO alunos (nome, email, idade) VALUES (?, ?, ?)";
+  db.query(sql, [nome, email, idade], (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.send("Aluno cadastrado com sucesso!");
+    }
+  });
+});
+
+app.get("/listar", (req, res) => {
+  db.query("SELECT * FROM alunos", (err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      res.json(result);
+    }
+  });
+});
+
+app.listen(3000, () => {
+  console.log("Servidor rodando na porta 3000");
+});
+
