@@ -1,0 +1,10 @@
+sistema-cadastro/
+│
+├── backend/
+│   ├── server.js
+│   └── db.sql
+│
+└── frontend/
+    ├── index.html
+    ├── style.css
+    └── script.js
